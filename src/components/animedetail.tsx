@@ -29,14 +29,15 @@ export const AnimeDetail = ({ slug }: { slug: string }) => {
         method: "GET",
       });
       const data = await response.json();
-      return data.data;
+      // console.log(data)
+      return data.anime;
     },
     enabled: !!slug,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5,
   });
 
-  console.log(anime);
+  console.log(anime)
 
   const duration = anime?.episodes?.map((ep) => ep.duration);
 
@@ -84,7 +85,7 @@ export const AnimeDetail = ({ slug }: { slug: string }) => {
                         href="/home"
                         className="flex items-center gap-2 text-xs"
                       >
-                        <Home className="w-4 h-4" /> Home
+                        <Home className="w-4 h-4" /> Beranda
                       </BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
@@ -124,13 +125,13 @@ export const AnimeDetail = ({ slug }: { slug: string }) => {
                     className="flex items-center gap-2"
                   >
                     <Play className="w-5 h-5" />
-                    <p className="">Start watching</p>
+                    <p className="">Mulai tonton</p>
                   </Link>
                 </Button>
               </div>
               <div className="flex md:flex-col h-full bg-white/10 flex-row gap-6">
                 <div className="flex flex-col gap-4 p-4">
-                  <p className="text-sm">Aired: {anime?.releaseDate}</p>
+                  <p className="text-sm">Tayang: {anime?.releaseDate}</p>
                   <p className="text-sm">Status: {anime?.status}</p>
                   <p className="text-sm">Duration: {anime?.releaseDate}</p>
                   <p className="text-sm">Rating: {anime?.rating}</p>
@@ -156,7 +157,7 @@ export const AnimeDetail = ({ slug }: { slug: string }) => {
         </div>
       </div>
       <div className="flex flex-col gap-4 py-6 border-y border-border mx-12">
-        <p className="text-xl font-bold text-primary">Synopsis</p>
+        <p className="text-xl font-bold text-primary">Sinopsis Anime</p>
          <p className="text-xs leading-5 max-w-3/5 font-light">{anime?.synopsis}</p>
       </div>
     </div>

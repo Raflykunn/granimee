@@ -60,7 +60,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar {...props} className="">
-      <div className="my-8 mx-4">
+      <div className="">
         {/* <SidebarHeader>
           <div className="flex gap-4 items-center">
             <span className="w-1/3 bg-gray-400 h-[0.5px] rounded-sm"></span>

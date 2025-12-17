@@ -119,6 +119,7 @@
   clip-path: inset(0 100% 0 0);
   animation:d1 1s steps(4) infinite;
 }
+
 @keyframes d1 {to{clip-path: inset(0 -34% 0 0)}}
 
 @layer base {

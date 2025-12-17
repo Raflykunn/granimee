@@ -18,8 +18,6 @@ export default function Page() {
 
   const index = Object.keys(grouped).sort();
 
-  console.log(index);
-
   return (
     <div className="w-full mx-12 my-30 flex flex-col gap-12">
       <div className="flex flex-col gap-4">
@@ -44,7 +42,7 @@ export default function Page() {
           <div className="border-b-2 border-ring w-[90%]">
             <H4 text={item} />
           </div>
-          <ul className="flex justify-between flex-wrap gap-16">
+          <ul className="flex justify-between flex-wrap gap-8 w-4/5">
             {grouped[item].map((item, index) => (
               <ul key={index}>
                 <li className="list-disc ml-5">

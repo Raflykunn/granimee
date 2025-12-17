@@ -1,34 +1,32 @@
-import { PrismaClient } from "@/generated/prisma";
+import { supabase } from "@/lib/supabaseClient";
 import { IAnime } from "@/lib/utils";
+import { createId } from "@paralleldrive/cuid2";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   const body: IAnime = await req.json();
 
-  const prisma = new PrismaClient();
+  const id = createId()
 
-  try {
-    await prisma.$connect();
-    await prisma.anime.create({
-      data: {
-        title: body.title,
-        synopsis: body.synopsis,
-        coverImage: body.coverImage,
-        bannerImage: body.bannerImage,
-        genre: body.genre,
-        status: body.status,
-        releaseDate: body.releaseDate,
-        rating: body.rating,
-      },
+  const { data, error } = await supabase.from("anime").insert({
+    id: id,
+    title: body.title,
+    synopsis: body.synopsis,
+    coverImage: body.coverImage,
+    bannerImage: body.bannerImage,
+    genre: body.genre,
+    status: body.status,
+    releaseDate: Number(body.releaseDate),
+    rating: Number(body.rating),
+  });
+
+  if (error) {
+    console.log(error);
+    return NextResponse.json({
+      status: 400,
+      message: "Kesalahan pengisian data",
     });
-  } catch (error) {
-    console.log(error)
-    return NextResponse.json({ status: 400, message: error, });
-  } finally {
-    await prisma.$disconnect();
-  }
-
-  return NextResponse.json({ status: 200, message: "Done !", });
+  } else return NextResponse.json({ status: 200, message: "Done !", data });
 }
 
 export async function PUT(req: NextRequest) {

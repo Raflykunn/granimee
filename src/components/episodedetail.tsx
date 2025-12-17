@@ -9,7 +9,7 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
-  BreadcrumbSeparator,
+  BreadcrumbSeparator
 } from "./ui/breadcrumb";
 import { ScrollArea } from "./ui/scroll-area";
 import { H3 } from "./ui/typography";
@@ -21,36 +21,24 @@ export const EpisodeDetail = ({
   slug: string;
   episodeNow: number;
 }) => {
+  const { anime: cachedData, isLoading } = useDetailAnime(slug);
 
-  const {anime: cachedData, isLoading} = useDetailAnime(slug)
+  // console.log(cachedData)
 
   if (isLoading) {
     return (
-      <div className="w-screen h-screen flex items-center justify-center bg-background/50">
+      <div className="w-full h-screen flex items-center justify-center bg-background/50">
         <div className="custom-loader"></div>
       </div>
-    )
+    );
   }
 
-  console.log(cachedData);
-
-  const episode = cachedData?.episodes?.find(
+  const episode = cachedData?.episode?.find(
     (ep) => ep.episodeNum === Number(episodeNow)
   );
 
-  console.log(1 == episodeNow);
-
   return (
     <div>
-      {/* <div className="absolute md:shrink-0 max-h-[720px] h-[80vh] w-full">
-        <Image
-          src={cachedData?.bannerImage || ""}
-          alt="cover"
-          width={1280}
-          height={720}
-          className="absolute top-0 left-0 h-full w-full brightness-50 saturate-50 object-cover blur-xl"
-        />
-      </div> */}
       <div className="max-w-7xl w-full mx-auto py-30 px-24 flex flex-col gap-6">
         <Breadcrumb>
           <BreadcrumbList>
@@ -63,41 +51,47 @@ export const EpisodeDetail = ({
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
-            <BreadcrumbItem className="text-xs">
-                Anime
-            </BreadcrumbItem>
+            <BreadcrumbItem className="text-xs">Anime</BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage className="text-xs">
+              <BreadcrumbLink className="text-xs" href={`/anime/${cachedData?.id}`}>
                 {cachedData?.title}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator/>
+            <BreadcrumbItem>
+              <BreadcrumbPage className="text-xs">
+               <p>
+                Episode {episode?.episodeNum}
+                </p>
               </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
         <div className="flex bg-card border border-border rounded-lg justify-between md:flex-row flex-col">
-          <ScrollArea className="max-w-80 w-full rounded-tl-lg rounded-bl-lg bg-sidebar">
+          <ScrollArea className="max-w-80 aspect-video w-full rounded-tl-lg rounded-bl-lg bg-sidebar">
             <div className="flex flex-col">
-              <p className="text-foreground mt-6 mb-4 mx-4 text-xs font-semibold">
+              <p className="text-foreground border-b-2 mt-6 pb-4 mx-4 text-xs font-semibold">
                 Daftar episode:
               </p>
-              {cachedData?.episodes?.map((ep, index) => (
+              {cachedData?.episode?.map((ep, index) => (
                 <Link
                   key={index}
                   href={`/anime/${slug}/watch?episode=${ep.episodeNum}`}
                   className={`${
                     index + 1 == episodeNow
                       ? (index + 1) % 2 !== 0
-                        ? "bg-border/40 border-r-4 border-primary"
-                        : "bg-border border-r-4 border-primary"
+                        ? "bg-border/40 border-r-12 border-primary"
+                        : "bg-border border-r-12 border-primary"
                       : ""
-                  } flex gap-6 items-center py-2 px-4 hover:text-primary`}
+                  } flex gap-3 items-center py-4 px-4 hover:text-primary`}
                 >
                   <p
                     className={`${
                       index + 1 == episodeNow
                         ? "text-primary font-semibold"
                         : ""
-                    } font-medium`}
+                    } font-medium w-5`}
                   >
                     {index + 1}
                   </p>
@@ -108,7 +102,7 @@ export const EpisodeDetail = ({
                         : ""
                     } text-xs font-medium truncate w-48`}
                   >
-                    {ep.title}
+                   Episode {ep.title}
                   </p>
                   <span
                     className={`${
@@ -134,6 +128,7 @@ export const EpisodeDetail = ({
         <div className="flex max-h-58 bg-card border border-primary rounded-lg justify-between">
           <div className="flex gap-8">
             <Image
+              priority
               src={cachedData?.bannerImage || ""}
               width={480}
               height={720}
@@ -153,11 +148,7 @@ export const EpisodeDetail = ({
                   {cachedData?.releaseDate}
                 </p>
               </div>
-              <div className="max-w-lg max-h-24 overflow-y-auto">
-                <p className="text-xs">
-                  {episode?.description?.slice(0, 1000).toString()}
-                </p>
-              </div>
+              <div className="max-w-lg max-h-24 overflow-y-auto"></div>
             </div>
           </div>
           <div className="flex md:flex-col h-58 rounded-tr-lg rounded-br-lg w-1/3 bg-white/10 flex-row gap-6">

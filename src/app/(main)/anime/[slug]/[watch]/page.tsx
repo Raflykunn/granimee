@@ -7,14 +7,11 @@ export default function WatchPage () {
     const searchParams = useSearchParams()
 
     const slug = params.slug as string
-    const episode = searchParams.get("episode") as string
-
-    console.log(slug)
-    console.log(episode)
+    const episode = searchParams.get("episode")
 
     return (
         <div>
-            <EpisodeDetail slug={slug} episodeNow={episode} />
+            <EpisodeDetail slug={slug} episodeNow={Number(episode)} />
         </div>
     )
 }

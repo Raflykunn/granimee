@@ -16,8 +16,8 @@ export default function AuthCallback() {
       const {
         data: { session },
       } = await supabase.auth.getSession();
-      console.log("Logged in user:", session?.user);
-      if (session) router.push("/home");
+       router.push("/home");
+      
     };
     getSession();
   }, []);

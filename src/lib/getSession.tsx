@@ -36,7 +36,6 @@ export const SessionProvider = ({
     };
     getSession();
 
-    // Listen perubahan login/logout
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {

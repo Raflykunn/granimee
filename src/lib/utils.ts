@@ -9,12 +9,12 @@ export const BackendIP = process.env.BACKEND_IP ? process.env.BACKEND_IP : "http
 
 // User tanpa relasi
 export interface IUser {
-  id: string
-  email: string
+  id?: string
+  email?: string
   username?: string | null
   role: "user" | "admin"
-  createdAt: Date
-  updatedAt: Date
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 // Anime tanpa relasi
@@ -36,8 +36,7 @@ export interface IEpisode {
   animeId: string
   title: string
   episodeNum: number
-  description?: string | null
-  duration?: number | null // detik
+  duration: string 
   releaseDate?: Date | null
   videoUrl: string
   subtitleUrl?: string | null
@@ -61,7 +60,7 @@ export interface IUserWithHistory extends IUser {
 
 // Anime dengan episode
 export interface IAnimeWithEpisodes extends IAnime {
-  episodes: IEpisode[]
+  episode: IEpisode[]
 }
 
 // Episode dengan anime & riwayat tontonan

@@ -4,29 +4,24 @@ import { Footer } from "@/components/ui/footer";
 import { Navbar } from "@/components/ui/navbar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import ReactQueryProvider from "@/lib/ReactQueryProvider";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
 
 export default function AnimeDetailPage({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const queryClient = new QueryClient();
-
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className="relative">
+    <div className="relative">
+      <ReactQueryProvider>
         <div className="flex justify-center items-center">
           <Navbar />
         </div>
-        <SidebarProvider>
+        <SidebarProvider className="max-w-7xl">
           <AppSidebar />
-          <SidebarInset>
-            <ReactQueryProvider>{children}</ReactQueryProvider>
-          </SidebarInset>
+          <SidebarInset>{children}</SidebarInset>
           <Toaster />
         </SidebarProvider>
         <Footer />
-      </div>
-    </QueryClientProvider>
+      </ReactQueryProvider>
+    </div>
   );
 }

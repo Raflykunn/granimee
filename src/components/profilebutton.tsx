@@ -1,7 +1,7 @@
 import { useSession } from "@/lib/getSession";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Avatar, AvatarFallback } from "./ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 
 export const ProfileButton = () => {
@@ -22,17 +22,20 @@ export const ProfileButton = () => {
   return (
     <div>
       {isProfile ? (
-        <Link href={`/profile/${session?.user.user_metadata.id}`}>
+        <Link href={`/profile/${session?.user.id}`}>
           <Avatar>
-            {/* <AvatarImage src={session?.user_metadata.avatar_url} /> */}
-            <AvatarFallback>
-              {session?.user.user_metadata?.name?.charAt(0).toUpperCase()}
-            </AvatarFallback>
+            {session?.user.user_metadata?.picture ? (
+              <AvatarImage src={session?.user.user_metadata?.picture} />
+            ) : (
+              <AvatarFallback>
+                {session?.user.user_metadata?.name?.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            )}
           </Avatar>
         </Link>
       ) : (
         <div>
-          <Link href={"auth/login"}>
+          <Link href={"/auth/login"}>
             <Button variant={"outline"} className="">
               Login
             </Button>

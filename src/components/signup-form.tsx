@@ -9,8 +9,9 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/lib/supabaseClient";
-import { cn } from "@/lib/utils";
+import { BackendIP, cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createClient } from "@supabase/supabase-js";
 import { Eye, EyeClosed, Mail, MailCheck, User } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -25,7 +26,7 @@ export const SignupForm = ({
   ...props
 }: React.ComponentProps<"div">) => {
   const [showPass, setShowPass] = useState(false);
-  const [isVerification, setIsVerification] = useState(false)
+  const [isVerification, setIsVerification] = useState(false);
 
   const formSchema = z.object({
     username: z.string().min(1, "Username tidak boleh kosong"),
@@ -47,7 +48,7 @@ export const SignupForm = ({
   });
 
   const googleLogin = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
         redirectTo: `http://localhost:3000/home`,
@@ -58,37 +59,47 @@ export const SignupForm = ({
   };
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-    
+    const supabasee = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+
     const validation = formSchema.safeParse(values);
     if (!validation.success) {
       toast.error(`Error: ${validation.error.message}`);
+      return
     }
 
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await supabasee.auth.signUp({
       email: values.email,
       password: values.password,
       options: {
         data: {
           name: values.username,
-          role: "admin"
+          role: "kami"
         },
-      }
+      },
     });
 
     if (data.user) {
-      await supabase.from("user").insert({
-        id: data.user.id,
-        username: values.username,
-        email: values.email,
-        role: "admin"
-    })
-  }
+      const upload = await fetch(`${BackendIP}/api/auth/signup`, {
+        method: "POST",
+        body: JSON.stringify({
+          id: data.user.id,
+          email: values.email,
+          username: values.username,
+          role: "kami"
+        })
+      })
+      if (upload.status !== 200) console.log(upload)
+    }
 
     if (error) {
       toast.error(`Error:, ${error.message}`);
+      return
     }
 
-    setIsVerification(true)
+    setIsVerification(true);
   };
 
   return (
@@ -223,5 +234,4 @@ const VerificationCard = () => {
       </CardHeader>
     </Card>
   );
-}
-
+};

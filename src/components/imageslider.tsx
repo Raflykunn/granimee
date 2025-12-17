@@ -30,13 +30,10 @@ export const ImageSlider = () => {
 
   const { anime: data, isLoading } = useAnime('/api/list/anime')
 
-  console.log(data);
 
   const anime: IAnime[] = data || [];
 
-  console.log(anime);
   const imagesList = anime.map((item) => item.coverImage).splice(0, 10);
-  console.log(imagesList);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -48,8 +45,6 @@ export const ImageSlider = () => {
 
     return () => clearInterval(interval);
   }, [imagesList]);
-
-  console.log(index);
 
   const paginate = (newDirection: number) => {
     setIndex(([prevPage]) => {
@@ -103,7 +98,7 @@ export const ImageSlider = () => {
                 <button className="cursor-pointer px-2 py-1 bg-accent text-accent-foreground rounded-md">
                   TV
                 </button>
-                <p>{anime[index].genre.join(", ")}</p>
+                <p className="text-sm">{anime[index].genre.join(", ")}</p>
               </div>
               <p className="text-sm line-clamp-3 overflow-hidden text-ellipsis">
                 {anime[index]?.synopsis}

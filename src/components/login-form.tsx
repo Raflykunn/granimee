@@ -28,7 +28,7 @@ export const LoginForm = ({
   const [showPass, setShowPass] = useState(false);
   const [message, setMessage] = useState("");
 
-  const router = useRouter()
+  const router = useRouter();
 
   const formSchema = z.object({
     email: z
@@ -72,23 +72,22 @@ export const LoginForm = ({
     });
 
     if (error) {
-      console.log(error.message)
       toast.error(error.message);
+      return;
     } else {
       toast.success("Login berhasil");
+      router.push("/auth/callback");
+      form.reset();
     }
-
-    router.push("/auth/callback")
-
-    form.reset();
-
   };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle className="flex justify-center text-xl mb-1">Masuk Akun</CardTitle>
+          <CardTitle className="flex justify-center text-xl mb-1">
+            Masuk Akun
+          </CardTitle>
           <CardDescription className="text-center">
             Masukkan detail akun kamu untuk masuk ke akun kamu.
           </CardDescription>
@@ -120,7 +119,11 @@ export const LoginForm = ({
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <div className="relative">
-                      <Input type={showPass ? "text" : "password"} autoComplete="off" {...field} />
+                      <Input
+                        type={showPass ? "text" : "password"}
+                        autoComplete="off"
+                        {...field}
+                      />
                       <button
                         type="button"
                         className="cursor-pointer"
@@ -132,19 +135,26 @@ export const LoginForm = ({
                           <Eye className="w-5 h-5 absolute top-1.5 right-3.5 text-muted-foreground" />
                         )}
                       </button>
-                    <FormMessage />
+                      <FormMessage />
                     </div>
                   </FormItem>
                 )}
               />
               <div className="flex flex-col items-center justify-center gap-4">
-                <Button type="submit" className="w-full">Login</Button>
+                <Button type="submit" className="w-full">
+                  Login
+                </Button>
                 <div className="flex gap-4 w-4/5 items-center">
                   <span className="h-[1px] w-full bg-muted"></span>
                   <p className="text-sm text-muted-foreground">Atau</p>
                   <span className="h-[1px] w-full bg-muted"></span>
                 </div>
-                <Button type="button" variant={"outline"} className="w-full" onClick={googleLogin}>
+                <Button
+                  type="button"
+                  variant={"outline"}
+                  className="w-full"
+                  onClick={googleLogin}
+                >
                   <FaGoogle /> Login dengan Google
                 </Button>
               </div>
@@ -152,7 +162,12 @@ export const LoginForm = ({
           </Form>
           <div className="text-xs justify-center mt-6 flex flex-wrap gap-1">
             <p className="text-muted-foreground">Belum punya akun?</p>
-            <Link className="text-primary hover:underline" href={"/auth/signup"}>Daftar disini</Link>
+            <Link
+              className="text-primary hover:underline"
+              href={"/auth/signup"}
+            >
+              Daftar disini
+            </Link>
           </div>
         </CardContent>
       </Card>
