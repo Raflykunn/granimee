@@ -1,7 +1,6 @@
 "use client";
-import { BackendIP, IAnimeWithEpisodes } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
-import { Clock, Home, Play } from "lucide-react";
+import { useDetailAnime } from "@/hooks/use-anime";
+import { Home, Play, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -18,28 +17,11 @@ import { Skeleton } from "./ui/skeleton";
 import { H3 } from "./ui/typography";
 
 export const AnimeDetail = ({ slug }: { slug: string }) => {
-  const {
-    data: anime,
-    isLoading,
-    isError,
-  } = useQuery<IAnimeWithEpisodes>({
-    queryKey: ["anime", slug],
-    queryFn: async () => {
-      const response = await fetch(`${BackendIP}/api/anime/${slug}`, {
-        method: "GET",
-      });
-      const data = await response.json();
-      // console.log(data)
-      return data.anime;
-    },
-    enabled: !!slug,
-    refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5,
-  });
+  console.log(slug);
 
-  console.log(anime)
+  const { anime, isLoading, isError } = useDetailAnime(slug);
 
-  const duration = anime?.episodes?.map((ep) => ep.duration);
+  console.log(anime);
 
   if (isLoading)
     return (
@@ -50,7 +32,7 @@ export const AnimeDetail = ({ slug }: { slug: string }) => {
           <Skeleton className="w-1/4 h-[50vh] rounded-sm shadow-lg" />
         </div>
         <div>
-          <Skeleton className="w-full h-[20vh] rounded-sm shadow-lg"/>
+          <Skeleton className="w-full h-[20vh] rounded-sm shadow-lg" />
         </div>
       </div>
     );
@@ -61,7 +43,7 @@ export const AnimeDetail = ({ slug }: { slug: string }) => {
     <div className="flex flex-col gap-12">
       <div className="relative md:shrink-0 max-h-[400px] h-[70vh] w-full">
         <Image
-          src={anime?.bannerImage || ""}
+          src={anime?.image || ""}
           alt="cover"
           width={1280}
           height={720}
@@ -71,7 +53,7 @@ export const AnimeDetail = ({ slug }: { slug: string }) => {
           <div className="flex flex-row md:flex-col justify-between px-14">
             <div className="flex gap-18">
               <Image
-                src={anime?.bannerImage || ""}
+                src={anime?.image || ""}
                 width={480}
                 height={720}
                 className="w-40 h-58 rounded-sm shadow-lg"
@@ -85,7 +67,7 @@ export const AnimeDetail = ({ slug }: { slug: string }) => {
                         href="/home"
                         className="flex items-center gap-2 text-xs"
                       >
-                        <Home className="w-4 h-4" /> Beranda
+                        <Home className="w-4 h-4" /> Home
                       </BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
@@ -106,14 +88,11 @@ export const AnimeDetail = ({ slug }: { slug: string }) => {
                   <H3 text={anime?.title || ""} />
                 </div>
                 <div className="text-xs flex gap-6 mb-2 items-center">
+                  <p className="font-semibold px-2 py-1 flex gap-2 items-center bg-accent text-accent-foreground rounded-sm">
+                    <Star className="w-4 h-4" /> {anime?.mal_score}
+                  </p>
                   <p className="font-semibold px-2 py-1 bg-accent text-accent-foreground rounded-sm">
-                    HD
-                  </p>
-                  <p className="flex items-center gap-2 font-medium">
-                    <Clock className="w-5 h-5" /> 25 min
-                  </p>
-                  <p className="flex items-center gap-2 font-medium">
-                    {anime?.releaseDate}
+                    {anime?.type}
                   </p>
                 </div>
                 <Button
@@ -121,23 +100,23 @@ export const AnimeDetail = ({ slug }: { slug: string }) => {
                   className="py-6 font-semibold mb-2 w-max"
                 >
                   <Link
-                    href={`/anime/${slug}/watch?episode=1`}
+                    href={`/anime/${slug}/watch?ep=1`}
                     className="flex items-center gap-2"
                   >
                     <Play className="w-5 h-5" />
-                    <p className="">Mulai tonton</p>
+                    <p className="">Start Waching</p>
                   </Link>
                 </Button>
               </div>
               <div className="flex md:flex-col h-full bg-white/10 flex-row gap-6">
                 <div className="flex flex-col gap-4 p-4">
-                  <p className="text-sm">Tayang: {anime?.releaseDate}</p>
+                  <p className="text-sm">Aired: {anime?.aired}</p>
                   <p className="text-sm">Status: {anime?.status}</p>
-                  <p className="text-sm">Duration: {anime?.releaseDate}</p>
-                  <p className="text-sm">Rating: {anime?.rating}</p>
+                  <p className="text-sm">Duration: {anime?.duration}</p>
+                  <p className="text-sm">Rating: {anime?.mal_score}</p>
                   <div className="flex flex-wrap gap-4 items-center">
                     <p className="mb-2 text-sm">Genre:</p>
-                    {(anime?.genre ?? [])
+                    {(anime?.genres ?? [])
                       .join(", ")
                       .split(", ")
                       .map((g, index) => (
@@ -157,8 +136,10 @@ export const AnimeDetail = ({ slug }: { slug: string }) => {
         </div>
       </div>
       <div className="flex flex-col gap-4 py-6 border-y border-border mx-12">
-        <p className="text-xl font-bold text-primary">Sinopsis Anime</p>
-         <p className="text-xs leading-5 max-w-3/5 font-light">{anime?.synopsis}</p>
+        <p className="text-xl font-bold text-primary">The Synopsis</p>
+        <p className="text-xs leading-5 max-w-3/5 font-light">
+          {anime?.description}
+        </p>
       </div>
     </div>
   );

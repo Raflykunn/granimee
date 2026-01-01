@@ -22,9 +22,7 @@ export default function RootLayout({
       <body
         className={`${font.className} dark mx-auto overflow-x-hidden max-w-[1440px] bg-background text-foreground antialiased`}
       >
-        <SessionProvider>
-        {children}
-        </SessionProvider>
+        <SessionProvider>{children}</SessionProvider>
       </body>
     </html>
   );

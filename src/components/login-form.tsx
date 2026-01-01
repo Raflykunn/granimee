@@ -33,10 +33,10 @@ export const LoginForm = ({
   const formSchema = z.object({
     email: z
       .email({
-        message: "Email tidak valid",
+        message: "Email not valid!",
       })
-      .min(1, "Email tidak boleh kosong"),
-    password: z.string().min(1, "Password tidak boleh kosong"),
+      .min(1, "Email is required!"),
+    password: z.string().min(1, "Password is required!"),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -75,7 +75,7 @@ export const LoginForm = ({
       toast.error(error.message);
       return;
     } else {
-      toast.success("Login berhasil");
+      toast.success("Login Success!");
       router.push("/auth/callback");
       form.reset();
     }
@@ -86,10 +86,10 @@ export const LoginForm = ({
       <Card>
         <CardHeader>
           <CardTitle className="flex justify-center text-xl mb-1">
-            Masuk Akun
+            Login
           </CardTitle>
           <CardDescription className="text-center">
-            Masukkan detail akun kamu untuk masuk ke akun kamu.
+            Enter your email and password to login.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -155,18 +155,18 @@ export const LoginForm = ({
                   className="w-full"
                   onClick={googleLogin}
                 >
-                  <FaGoogle /> Login dengan Google
+                  <FaGoogle /> Login with Google
                 </Button>
               </div>
             </form>
           </Form>
           <div className="text-xs justify-center mt-6 flex flex-wrap gap-1">
-            <p className="text-muted-foreground">Belum punya akun?</p>
+            <p className="text-muted-foreground">Don't have an account?</p>
             <Link
               className="text-primary hover:underline"
               href={"/auth/signup"}
             >
-              Daftar disini
+              Register here.
             </Link>
           </div>
         </CardContent>

@@ -1,5 +1,5 @@
 "use client";
-import { useDetailAnime } from "@/hooks/use-anime";
+import { useDetailAnime, useWatchEpisode } from "@/hooks/use-anime";
 import { Clock, Home, Play } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,10 +9,11 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
-  BreadcrumbSeparator
+  BreadcrumbSeparator,
 } from "./ui/breadcrumb";
 import { ScrollArea } from "./ui/scroll-area";
 import { H3 } from "./ui/typography";
+import { VideoPlayer } from "./videosupported";
 
 export const EpisodeDetail = ({
   slug,
@@ -21,21 +22,19 @@ export const EpisodeDetail = ({
   slug: string;
   episodeNow: number;
 }) => {
-  const { anime: cachedData, isLoading } = useDetailAnime(slug);
+  const { anime, isLoading: isLoadingDetail } = useDetailAnime(slug);
+  const episodeId = anime ? anime?.episodes[episodeNow - 1]?.id : "";
+  const { streamData, isLoading } = useWatchEpisode(episodeId);
+  const episodeListData = anime?.episodes;
+  // console.log(episodeData)
 
-  // console.log(cachedData)
-
-  if (isLoading) {
+  if (isLoading || isLoadingDetail) {
     return (
       <div className="w-full h-screen flex items-center justify-center bg-background/50">
         <div className="custom-loader"></div>
       </div>
     );
   }
-
-  const episode = cachedData?.episode?.find(
-    (ep) => ep.episodeNum === Number(episodeNow)
-  );
 
   return (
     <div>
@@ -47,23 +46,21 @@ export const EpisodeDetail = ({
                 href="/home"
                 className="flex items-center gap-2 text-xs"
               >
-                <Home className="w-4 h-4" /> Beranda
+                <Home className="w-4 h-4" /> Home
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem className="text-xs">Anime</BreadcrumbItem>
             <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink className="text-xs" href={`/anime/${cachedData?.id}`}>
-                {cachedData?.title}
+            {/* <BreadcrumbItem>
+              <BreadcrumbLink className="text-xs" href={`/anime/${slug}/watch?episode=${episodeNow}`}>
+                {episodeData?.}
               </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator/>
+            </BreadcrumbItem> */}
+            <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbPage className="text-xs">
-               <p>
-                Episode {episode?.episodeNum}
-                </p>
+                <p>Episode {episodeNow}</p>
               </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
@@ -72,12 +69,12 @@ export const EpisodeDetail = ({
           <ScrollArea className="max-w-80 aspect-video w-full rounded-tl-lg rounded-bl-lg bg-sidebar">
             <div className="flex flex-col">
               <p className="text-foreground border-b-2 mt-6 pb-4 mx-4 text-xs font-semibold">
-                Daftar episode:
+                Episode List:
               </p>
-              {cachedData?.episode?.map((ep, index) => (
+              {episodeListData?.map((ep, index) => (
                 <Link
                   key={index}
-                  href={`/anime/${slug}/watch?episode=${ep.episodeNum}`}
+                  href={`/anime/${slug}/watch?ep=${index + 1}`}
                   className={`${
                     index + 1 == episodeNow
                       ? (index + 1) % 2 !== 0
@@ -102,7 +99,7 @@ export const EpisodeDetail = ({
                         : ""
                     } text-xs font-medium truncate w-48`}
                   >
-                   Episode {ep.title}
+                    {ep.title}
                   </p>
                   <span
                     className={`${
@@ -116,12 +113,9 @@ export const EpisodeDetail = ({
             </div>
           </ScrollArea>
           <div className="w-full aspect-video">
-            <video
-              className="rounded-tr-lg rounded-br-lg w-full"
-              controls
-              src={episode?.videoUrl}
-              width="640"
-              height={"360"}
+            <VideoPlayer
+              subtitle_src={streamData?.subtitles[0].url || ""}
+              src={streamData?.sources[0]?.url || ""}
             />
           </div>
         </div>
@@ -129,23 +123,27 @@ export const EpisodeDetail = ({
           <div className="flex gap-8">
             <Image
               priority
-              src={cachedData?.bannerImage || ""}
+              src={anime?.image || ""}
               width={480}
               height={720}
               className="w-40 h-58 rounded-tl-lg rounded-bl-lg shadow-lg"
               alt="cover"
             />
             <div className="flex flex-col gap-2 my-4 mr-4">
-              <H3 text={cachedData?.title || ""} />
+              <H3
+                text={
+                  episodeListData ? episodeListData[episodeNow - 1]?.title : ""
+                }
+              />
               <div className="text-xs flex gap-6 mb-2 items-center">
                 <p className="font-semibold px-2 py-1 bg-accent text-accent-foreground rounded-sm">
-                  HD
+                  {anime?.type}
                 </p>
                 <p className="flex items-center gap-2 font-medium">
-                  <Clock className="w-5 h-5" /> 25 min
+                  <Clock className="w-5 h-5" /> {anime?.duration}
                 </p>
                 <p className="flex items-center gap-2 font-medium">
-                  {cachedData?.releaseDate}
+                  {anime?.status}
                 </p>
               </div>
               <div className="max-w-lg max-h-24 overflow-y-auto"></div>
@@ -153,13 +151,13 @@ export const EpisodeDetail = ({
           </div>
           <div className="flex md:flex-col h-58 rounded-tr-lg rounded-br-lg w-1/3 bg-white/10 flex-row gap-6">
             <div className="flex flex-col gap-4 p-4">
-              <p className="text-xs">Tayang: {cachedData?.releaseDate}</p>
-              <p className="text-xs">Status: {cachedData?.status}</p>
-              <p className="text-xs">Duration: {cachedData?.releaseDate}</p>
-              <p className="text-xs">Rating: {cachedData?.rating}</p>
+              <p className="text-xs">Aired: {anime?.aired}</p>
+              <p className="text-xs">Status: {anime?.status}</p>
+              <p className="text-xs">Duration: {anime?.duration}</p>
+              <p className="text-xs">Rating: {anime?.mal_score}</p>
               <div className="flex flex-wrap gap-4 items-center">
                 <p className="mb-2 text-xs">Genre:</p>
-                {(cachedData?.genre ?? [])
+                {(anime?.genres ?? [])
                   .join(", ")
                   .split(", ")
                   .map((g, index) => (

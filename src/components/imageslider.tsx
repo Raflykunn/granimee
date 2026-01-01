@@ -1,14 +1,14 @@
 "use client";
 
-import { useAnime } from "@/hooks/use-anime";
-import { IAnime } from "@/lib/utils";
+import { usePopularSeasonAnime } from "@/hooks/use-anime";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Play, Star } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
+import { Card } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
-import { H1 } from "./ui/typography";
+import { H3 } from "./ui/typography";
 
 const variants = {
   enter: (direction: number) => ({
@@ -28,18 +28,15 @@ const variants = {
 export const ImageSlider = () => {
   const [[index, direction], setIndex] = useState([1, 0]);
 
-  const { anime: data, isLoading } = useAnime('/api/list/anime')
+  const { anime, isLoading } = usePopularSeasonAnime();
 
-
-  const anime: IAnime[] = data || [];
-
-  const imagesList = anime.map((item) => item.coverImage).splice(0, 10);
+  const imagesList = anime.map((item) => item.image).splice(0, 10);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex(([prevPage]) => {
         const nextPage = (prevPage + 1) % (imagesList?.length || 1);
-        return [nextPage, 1]; 
+        return [nextPage, 1];
       });
     }, 5000);
 
@@ -54,32 +51,41 @@ export const ImageSlider = () => {
     });
   };
 
-  if (isLoading) return (
-    <div className="">
-      <Skeleton className="w-[98%] mx-auto my-2 bg-card xl:h-[400px] max-h-[640px]"/>
-    </div>
-  );
+  if (isLoading)
+    return (
+      <div className="">
+        <Skeleton className="w-[98%] mx-auto my-2 bg-card xl:h-[400px] max-h-[640px]" />
+      </div>
+    );
 
   return (
-    <div className="w-full mx-auto relative">
-      <div className="absolute bg-gradient-to-r from-20% from-background to-100% to-transparent w-full h-[75vh] max-h-[640px] z-10"></div>
+    <Card className="w-full overflow-hidden border-primary p-0 mx-auto relative rounded-xl">
+      <div className="absolute bg-gradient-to-r from-17% from-background to-100% to-transparent w-full h-[75vh] max-h-[640px] z-10"></div>
       <div className="absolute bg-gradient-to-l from-background/100  to-20% to-transparent w-full h-[75vh] max-h-[640px] z-10"></div>
       <div className="absolute bg-gradient-to-t from-10% from-background/40 to-20% to-transparent w-full h-[75vh] max-h-[640px] z-10"></div>
 
-      <div className="relative overflow-hidden h-[75vh] max-h-[640px]">
-        <div className="absolute bottom-10 right-12 flex gap-6 items-center z-20">
-          <Button variant={"outline"} onClick={() => paginate(-1)} className="bg-accent cursor-pointer">
+      <div className="relative rounded-xl overflow-hidden h-[65vh] max-h-[480px]">
+        <div className="absolute bottom-8 right-8 flex gap-6 items-center z-20">
+          <Button
+            variant={"outline"}
+            onClick={() => paginate(-1)}
+            className="dark:bg-accent dark:text-accent-foreground dark:hover:bg-accent dark:hover:text-accent-foreground border rounded-full cursor-pointer"
+          >
             <ChevronLeft className="w-12 h-12" />
           </Button>
           <p className="">
             {index + 1} / {imagesList.length}
           </p>
-          <Button variant={"outline"} onClick={() => paginate(1)} className="bg-accent cursor-pointer">
+          <Button
+            variant={"outline"}
+            onClick={() => paginate(1)}
+            className="dark:bg-accent dark:border-accent dark:text-accent-foreground dark:hover:bg-accent dark:hover:text-accent-foreground border rounded-full cursor-pointer"
+          >
             <ChevronRight className="w-12 h-12" />
           </Button>
         </div>
         <AnimatePresence initial={false} custom={direction}>
-          <div key={index}>
+          <div key={index} className="rounded-xl w-full h-full">
             <motion.div
               custom={direction}
               variants={variants}
@@ -87,29 +93,32 @@ export const ImageSlider = () => {
               animate="center"
               exit="exit"
               transition={{ duration: 0.5 }}
-              className="absolute top-30 xl:left-12 sm:left-8 max-w-lg w-full flex flex-col gap-3 z-20"
+              className="absolute top-1/2 -translate-y-1/2 xl:left-12 sm:left-8 max-w-lg w-3/5 flex flex-col gap-3 z-20"
             >
-              <p className="text-primary text-lg">#{index + 1} Banyak Ditonton</p>
-              <H1 text={anime[index]?.title} />
+              <p className="text-primary text-sm">#{index + 1} This Season</p>
+              <H3 text={anime[index]?.title} />
               <div className="flex gap-5 items-center">
-                <Button variant={"outline"} className="flex gap-2 cursor-pointer text-primary px-3 py-1">
-                  <Star className="w-5 h-5" /> {anime[index].rating}
+                <Button
+                  variant={"outline"}
+                  className="flex gap-2 cursor-pointer text-primary px-3 py-1"
+                >
+                  <Star className="w-5 h-5" /> {anime[index].other_data.rank}
                 </Button>
                 <button className="cursor-pointer px-2 py-1 bg-accent text-accent-foreground rounded-md">
-                  TV
+                  {anime[index].type}
                 </button>
-                <p className="text-sm">{anime[index].genre.join(", ")}</p>
+                {/* <p className="text-sm">{anime[index]..join(", ")}</p> */}
               </div>
-              <p className="text-sm line-clamp-3 overflow-hidden text-ellipsis">
-                {anime[index]?.synopsis}
+              <p className="text-xs line-clamp-2 overflow-hidden text-ellipsis">
+                {anime[index]?.other_data.description}
               </p>
               <div className="flex gap-2 items-center">
                 <Link
                   href={`/anime/${anime[index].id}/watch?episode=1`}
-                  className="font-semibold px-5 py-3 bg-primary text-primary-foreground rounded-full flex items-center justify-center gap-2"
+                  className="font-semibold px-5 py-3 bg-primary text-primary-foreground rounded-full flex items-center justify-center gap-2 text-sm"
                 >
-                  <Play className="w-5 h-5" />
-                  Nonton Sekarang
+                  <Play className="w-4 h-4" />
+                  Watch Now
                 </Link>
                 <Link
                   href={`/anime/${anime[index].id}`}
@@ -120,7 +129,7 @@ export const ImageSlider = () => {
                 </Link>
               </div>
             </motion.div>
-            <div className="relative">
+            <div className="relative rounded-xl w-full h-full">
               <motion.img
                 custom={direction}
                 variants={variants}
@@ -129,13 +138,13 @@ export const ImageSlider = () => {
                 exit="exit"
                 transition={{ duration: 0.5 }}
                 alt="image"
-                className="absolute top-0 left-0 w-full object-cover"
+                className="absolute top-0 left-0 rounded-xl w-full h-full object-cover"
                 src={imagesList[index] || ""}
               />
             </div>
           </div>
         </AnimatePresence>
       </div>
-    </div>
+    </Card>
   );
 };

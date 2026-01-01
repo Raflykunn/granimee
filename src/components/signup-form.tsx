@@ -29,13 +29,13 @@ export const SignupForm = ({
   const [isVerification, setIsVerification] = useState(false);
 
   const formSchema = z.object({
-    username: z.string().min(1, "Username tidak boleh kosong"),
+    username: z.string().min(1, "Username is required!"),
     email: z
       .email({
-        message: "Email tidak valid",
+        message: "Email not valid!",
       })
-      .min(1, "Email tidak boleh kosong"),
-    password: z.string().min(1, "Password tidak boleh kosong"),
+      .min(1, "Email is required!"),
+    password: z.string().min(1, "Password is required!"),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -67,7 +67,7 @@ export const SignupForm = ({
     const validation = formSchema.safeParse(values);
     if (!validation.success) {
       toast.error(`Error: ${validation.error.message}`);
-      return
+      return;
     }
 
     const { data, error } = await supabasee.auth.signUp({
@@ -76,7 +76,7 @@ export const SignupForm = ({
       options: {
         data: {
           name: values.username,
-          role: "kami"
+          role: "kami",
         },
       },
     });
@@ -88,15 +88,15 @@ export const SignupForm = ({
           id: data.user.id,
           email: values.email,
           username: values.username,
-          role: "kami"
-        })
-      })
-      if (upload.status !== 200) console.log(upload)
+          role: "kami",
+        }),
+      });
+      if (upload.status !== 200) console.log(upload);
     }
 
     if (error) {
       toast.error(`Error:, ${error.message}`);
-      return
+      return;
     }
 
     setIsVerification(true);
@@ -111,11 +111,10 @@ export const SignupForm = ({
           <Card>
             <CardHeader>
               <CardTitle className="flex justify-center text-xl mb-1">
-                Daftar Akun
+                Register
               </CardTitle>
               <CardDescription className="text-center">
-                Daftarkan akun kamu agar dapat menggunakan berbagai fitur
-                granime.
+                Register your account to use various features of granime.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -194,18 +193,20 @@ export const SignupForm = ({
                       className="w-full"
                       onClick={googleLogin}
                     >
-                      <FaGoogle /> Daftar dengan Google
+                      <FaGoogle /> Register with Google
                     </Button>
                   </div>
                 </form>
               </Form>
               <div className="text-xs flex justify-center mt-6 flex-wrap gap-1">
-                <p className="text-muted-foreground">Sudah punya akun?</p>
+                <p className="text-muted-foreground">
+                  Already have an account?
+                </p>
                 <Link
                   className="text-primary hover:underline"
                   href={"/auth/login"}
                 >
-                  Masuk disini
+                  Login here.
                 </Link>
               </div>
             </CardContent>
@@ -221,10 +222,10 @@ const VerificationCard = () => {
     <Card>
       <CardHeader>
         <CardTitle className="flex justify-center text-xl mb-1">
-          Verifikasi Email
+          Verification Email
         </CardTitle>
         <CardDescription className="text-center">
-          Periksa inbox email kamu yang berisikan link verifikasi email
+          Check your inbox email for verification email
         </CardDescription>
         <CardContent className="flex flex-col mt-4 gap-4 items-center justify-center">
           <span className="text-primary">

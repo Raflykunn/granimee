@@ -15,9 +15,9 @@ export default function AnimeDetailPage({
         <div className="flex justify-center items-center">
           <Navbar />
         </div>
-        <SidebarProvider className="max-w-7xl">
+        <SidebarProvider className="">
           <AppSidebar />
-          <SidebarInset>{children}</SidebarInset>
+          <SidebarInset className="my-12 mx-4">{children}</SidebarInset>
           <Toaster />
         </SidebarProvider>
         <Footer />

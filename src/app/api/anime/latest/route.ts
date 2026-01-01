@@ -7,18 +7,25 @@ export async function GET() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
 
-  const { data: anime, error } = await supabase
-    .from("anime")
-    .select("*")
+  const { data: anime, error } = await supabase.from("anime").select("*");
 
   if (error) {
     console.log(error);
-    return NextResponse.json({
-      message: "Something went error on server :(",
-      status: 404,
-    });
+    return NextResponse.json(
+      {
+        message: "Something went error on server :(",
+      },
+      {
+        status: 404,
+      }
+    );
   }
 
   // console.log(anime)
-  return NextResponse.json({ anime, status: 200 });
+  return NextResponse.json(
+    { anime },
+    {
+      status: 200,
+    }
+  );
 }
