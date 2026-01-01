@@ -1,6 +1,6 @@
 "use client";
 import { useAnime, useDetailAnime, useLatestAnime } from "@/hooks/use-anime";
-import { Play } from "lucide-react";
+import { ChevronRight, Play } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -10,9 +10,6 @@ import { H3, H4 } from "./ui/typography";
 // {anime, isLoading = true}: {anime: IAnime[], isLoading: boolean}
 export const List = () => {
   const { anime, isLoading, error } = useLatestAnime();
-
-  console.log(anime);
-  console.log(error);
 
   if (isLoading) {
     return (
@@ -25,22 +22,33 @@ export const List = () => {
   }
 
   return (
-    <div className="z-20 overflow-hidden bg-background gap-8 my-4 mx-12 flex flex-col">
-      <H3 text={"Update terbaru"} />
-      <div className="flex flex-wrap gap-4">
-        {anime?.map((anime, index: number) => (
+    <div className="z-20 overflow-hidden bg-background gap-8 md:my-12 my-8 md:mx-12 mx-4 flex flex-col">
+      <div className="flex items-center justify-between">
+        <H3 text={"Latest Episode"} />
+        <Link
+          href="/latest"
+          className="text-foreground text-xs flex items-center"
+        >
+          View more <ChevronRight className="w-4 h-4" />
+        </Link>
+      </div>
+      <div className="flex flex-wrap gap-6">
+        {anime?.slice(0, 18)?.map((anime, index: number) => (
           <Link
             href={`/anime/${anime.id}`}
-            className="relative group w-1/5 h-max flex flex-col gap-2"
+            className="relative group max-w-full md:w-40 w-28 aspect-[1/1.45] flex-auto h-auto flex flex-col gap-2"
             key={index}
           >
-            <div className="absolute w-full aspect-[1/1.45] rounded-sm group-hover:bg-black/20 group-hover:backdrop-blur-sm flex justify-center items-center transition-all duration-500">
+            <div className="absolute w-full aspect-[1/1.45] rounded-sm group-hover:bg-black/30 group-hover:backdrop-blur-xs flex justify-center items-center transition-all duration-500">
               <span className="p-4 rounded-full bg-muted text-muted-foreground hidden group-hover:block">
                 <Play className="w-5 h-5" />
               </span>
             </div>
-            <p className="absolute top-1 left-1 rounded-sm text-xs opacity-85 font-semibold p-2 bg-accent text-accent-foreground">
-              {anime.episodes}
+            <p className="absolute bottom-8 left-1 rounded-sm text-xs opacity-85 font-bold p-2 bg-primary text-primary-foreground">
+              Episode {anime.episodes}
+            </p>
+            <p className="absolute top-1 right-1 rounded-sm text-[9px] font-semibold p-2 bg-accent text-accent-foreground">
+              {anime.type}
             </p>
             {/* <p className="absolute top-1 right-1 rounded-sm opacity-85 text-xs font-semibold p-2 bg-border text-primary">
               {anime?.}
@@ -52,7 +60,7 @@ export const List = () => {
               src={anime?.image || ""}
               className="object-cover w-full aspect-[1/1.45] rounded-sm"
             />
-            <p className="ml-1 text-sm truncate w-full text-primary-foreground">
+            <p className="ml-1 text-sm truncate w-full text-white">
               {anime?.title}
             </p>
           </Link>
@@ -136,7 +144,7 @@ export const TopList = () => {
   }
 
   return (
-    <Card className="flex flex-col gap-6 py-6 border-y border-l border-ring rounded-md">
+    <Card className="flex flex-col gap-6 py-6 md:border-y md:border-l md:border-ring border-none md:rounded-md md:shadow-none rounded-none">
       <CardHeader className="text-primary">
         <H4 text={"Paling Popular"} />
       </CardHeader>

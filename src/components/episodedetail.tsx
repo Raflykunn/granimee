@@ -57,7 +57,6 @@ export const EpisodeDetail = ({
                 {episodeData?.}
               </BreadcrumbLink>
             </BreadcrumbItem> */}
-            <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbPage className="text-xs">
                 <p>Episode {episodeNow}</p>
@@ -114,7 +113,7 @@ export const EpisodeDetail = ({
           </ScrollArea>
           <div className="w-full aspect-video">
             <VideoPlayer
-              subtitle_src={streamData?.subtitles[0].url || ""}
+              subtitles={streamData?.subtitles || []}
               src={streamData?.sources[0]?.url || ""}
             />
           </div>

@@ -17,7 +17,7 @@ export default function AnimeDetailPage({
         </div>
         <SidebarProvider className="">
           <AppSidebar />
-          <SidebarInset className="my-12 mx-4">{children}</SidebarInset>
+          <SidebarInset className="md:my-12 md:mx-4">{children}</SidebarInset>
           <Toaster />
         </SidebarProvider>
         <Footer />

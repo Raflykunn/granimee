@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning>
       <body
-        className={`${font.className} dark mx-auto overflow-x-hidden max-w-[1440px] bg-background text-foreground antialiased`}
+        className={`${font.className} dark mx-auto overflow-x-hidden bg-background text-foreground antialiased`}
       >
         <SessionProvider>{children}</SessionProvider>
       </body>

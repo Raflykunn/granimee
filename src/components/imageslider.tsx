@@ -2,13 +2,12 @@
 
 import { usePopularSeasonAnime } from "@/hooks/use-anime";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, Play, Star } from "lucide-react";
+import { ChevronLeft, ChevronRight, Play } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
-import { H3 } from "./ui/typography";
 
 const variants = {
   enter: (direction: number) => ({
@@ -54,26 +53,26 @@ export const ImageSlider = () => {
   if (isLoading)
     return (
       <div className="">
-        <Skeleton className="w-[98%] mx-auto my-2 bg-card xl:h-[400px] max-h-[640px]" />
+        <Skeleton className="w-[98%] mx-auto my-2 bg-card h-[35vh]" />
       </div>
     );
 
   return (
-    <Card className="w-full overflow-hidden border-primary p-0 mx-auto relative rounded-xl">
-      <div className="absolute bg-gradient-to-r from-17% from-background to-100% to-transparent w-full h-[75vh] max-h-[640px] z-10"></div>
-      <div className="absolute bg-gradient-to-l from-background/100  to-20% to-transparent w-full h-[75vh] max-h-[640px] z-10"></div>
-      <div className="absolute bg-gradient-to-t from-10% from-background/40 to-20% to-transparent w-full h-[75vh] max-h-[640px] z-10"></div>
+    <Card className="w-full overflow-hidden border-primary h-[35vh] md:h-[40vh] p-0 mx-auto relative rounded-xl">
+      <div className="absolute bg-gradient-to-r from-17% from-background to-100% to-transparent w-full h-[35vh] md:h-[40vh] z-10"></div>
+      <div className="absolute bg-gradient-to-l from-background/100  to-20% to-transparent w-full h-[35vh] md:h-[40vh] z-10"></div>
+      <div className="absolute bg-gradient-to-t from-10% from-background/40 to-20% to-transparent w-full h-[35vh] md:h-[40vh] z-10"></div>
 
-      <div className="relative rounded-xl overflow-hidden h-[65vh] max-h-[480px]">
-        <div className="absolute bottom-8 right-8 flex gap-6 items-center z-20">
+      <div className="relative rounded-xl overflow-hidden h-full">
+        <div className="absolute md:bottom-8 md:top-0 top-4 right-8 flex gap-6 items-center z-20">
           <Button
             variant={"outline"}
             onClick={() => paginate(-1)}
-            className="dark:bg-accent dark:text-accent-foreground dark:hover:bg-accent dark:hover:text-accent-foreground border rounded-full cursor-pointer"
+            className="dark:bg-accent md:size-12 size-8 dark:text-accent-foreground dark:hover:bg-accent dark:hover:text-accent-foreground border rounded-full cursor-pointer"
           >
-            <ChevronLeft className="w-12 h-12" />
+            <ChevronLeft className="md:w-12 md:h-12 w-8 h-8" />
           </Button>
-          <p className="">
+          <p className="text-xs md:text-base">
             {index + 1} / {imagesList.length}
           </p>
           <Button
@@ -93,36 +92,34 @@ export const ImageSlider = () => {
               animate="center"
               exit="exit"
               transition={{ duration: 0.5 }}
-              className="absolute top-1/2 -translate-y-1/2 xl:left-12 sm:left-8 max-w-lg w-3/5 flex flex-col gap-3 z-20"
+              className="absolute top-1/2 -translate-y-1/2 xl:left-12 sm:left-8 left-5 max-w-lg md:w-3/5 w-1/2 line-clamp-2 truncate flex flex-col gap-3 z-20"
             >
-              <p className="text-primary text-sm">#{index + 1} This Season</p>
-              <H3 text={anime[index]?.title} />
+              <p className="text-primary md:text-sm text-xs">
+                #{index + 1} This Season
+              </p>
+              <p className="md:text-2xl text-lg font-bold">
+                {anime[index]?.title}
+              </p>
               <div className="flex gap-5 items-center">
-                <Button
-                  variant={"outline"}
-                  className="flex gap-2 cursor-pointer text-primary px-3 py-1"
-                >
-                  <Star className="w-5 h-5" /> {anime[index].other_data.rank}
-                </Button>
-                <button className="cursor-pointer px-2 py-1 bg-accent text-accent-foreground rounded-md">
+                <button className="cursor-pointer px-2 py-1 bg-accent md:text-base text-sm text-accent-foreground rounded-md">
                   {anime[index].type}
                 </button>
                 {/* <p className="text-sm">{anime[index]..join(", ")}</p> */}
               </div>
-              <p className="text-xs line-clamp-2 overflow-hidden text-ellipsis">
+              <p className="text-xs md:block hidden line-clamp-2 overflow-hidden text-ellipsis">
                 {anime[index]?.other_data.description}
               </p>
               <div className="flex gap-2 items-center">
                 <Link
                   href={`/anime/${anime[index].id}/watch?episode=1`}
-                  className="font-semibold px-5 py-3 bg-primary text-primary-foreground rounded-full flex items-center justify-center gap-2 text-sm"
+                  className="font-semibold md:text-base px-5 py-3 bg-primary text-primary-foreground rounded-full flex items-center justify-center gap-2 text-xs"
                 >
                   <Play className="w-4 h-4" />
                   Watch Now
                 </Link>
                 <Link
                   href={`/anime/${anime[index].id}`}
-                  className="font-semibold px-5 py-3 bg-card border border-border text-foreground hover:text-accent-foreground rounded-full flex items-center justify-center gap-1 text-sm"
+                  className="font-semibold md:text-base px-5 py-3 bg-card border border-border text-foreground hover:text-accent-foreground rounded-full flex items-center justify-center gap-1 text-xs"
                 >
                   Detail
                   <ChevronRight className="w-5 h-5" />

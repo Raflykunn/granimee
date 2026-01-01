@@ -111,9 +111,9 @@ export const AnimeDetail = ({ slug }: { slug: string }) => {
               <div className="flex md:flex-col h-full bg-white/10 flex-row gap-6">
                 <div className="flex flex-col gap-4 p-4">
                   <p className="text-sm">Aired: {anime?.aired}</p>
-                  <p className="text-sm">Status: {anime?.status}</p>
+                  <p className="text-sm capitalize">Status: {anime?.status}</p>
                   <p className="text-sm">Duration: {anime?.duration}</p>
-                  <p className="text-sm">Rating: {anime?.mal_score}</p>
+                  <p className="text-sm">Studio: {anime?.studios?.[0]}</p>
                   <div className="flex flex-wrap gap-4 items-center">
                     <p className="mb-2 text-sm">Genre:</p>
                     {(anime?.genres ?? [])
