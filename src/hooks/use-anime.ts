@@ -1,6 +1,5 @@
 import {
   BackendIP,
-  IAnimeWithEpisodes,
   IHiAnimeCard,
   IHiAnimeDetail,
   IHiAnimeSpotlight,
@@ -63,15 +62,15 @@ export const useDetailAnime = (slug: string) => {
   return { anime, isLoading, isError };
 };
 
-export const useAnime = (apiUrl: string) => {
-  const { data: anime = [], isLoading } = useQuery<IAnimeWithEpisodes[]>({
+export const usePopularAnime = () => {
+  const { data: anime = [], isLoading } = useQuery<IHiAnimeSpotlight[]>({
     queryKey: ["anime"],
     queryFn: async () => {
-      const response = await fetch(`http://localhost:3000${apiUrl}`, {
+      const response = await fetch(`${BackendIP}/top-airing`, {
         method: "GET",
       });
       const data = await response.json();
-      return data.anime;
+      return data.results;
     },
     retry: 3,
     retryDelay: 2000,

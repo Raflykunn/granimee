@@ -58,10 +58,10 @@ export const ImageSlider = () => {
     );
 
   return (
-    <Card className="w-full overflow-hidden border-primary h-[35vh] md:h-[40vh] p-0 mx-auto relative rounded-xl">
-      <div className="absolute bg-gradient-to-r from-17% from-background to-100% to-transparent w-full h-[35vh] md:h-[40vh] z-10"></div>
-      <div className="absolute bg-gradient-to-l from-background/100  to-20% to-transparent w-full h-[35vh] md:h-[40vh] z-10"></div>
-      <div className="absolute bg-gradient-to-t from-10% from-background/40 to-20% to-transparent w-full h-[35vh] md:h-[40vh] z-10"></div>
+    <Card className="w-full overflow-hidden border-primary h-[35vh] md:h-[55vh] p-0 mx-auto relative rounded-xl">
+      <div className="absolute bg-gradient-to-r from-17% from-background to-100% to-transparent w-full h-[35vh] md:h-[55vh] z-10"></div>
+      <div className="absolute bg-gradient-to-l from-background/100  to-20% to-transparent w-full h-[35vh] md:h-[55vh] z-10"></div>
+      <div className="absolute bg-gradient-to-t from-10% from-background/40 to-20% to-transparent w-full h-[35vh] md:h-[55vh] z-10"></div>
 
       <div className="relative rounded-xl overflow-hidden h-full">
         <div className="absolute md:bottom-8 md:top-0 top-4 right-8 flex gap-6 items-center z-20">
@@ -106,7 +106,7 @@ export const ImageSlider = () => {
                 </button>
                 {/* <p className="text-sm">{anime[index]..join(", ")}</p> */}
               </div>
-              <p className="text-xs md:block hidden line-clamp-2 overflow-hidden text-ellipsis">
+              <p className="text-xs md:inline-block line-clamp-2 hidden">
                 {anime[index]?.other_data.description}
               </p>
               <div className="flex gap-2 items-center">

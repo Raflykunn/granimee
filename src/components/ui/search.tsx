@@ -1,6 +1,6 @@
 "use client";
 import { useDebounce } from "@/hooks/use-debounce";
-import { BackendIP, IAnime } from "@/lib/utils";
+import { BackendIP, IHiAnimeSpotlight } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { Search, X } from "lucide-react";
 import Image from "next/image";
@@ -50,93 +50,111 @@ export default function SearchBar() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const { data, isError, isLoading } = useQuery({
+  const { data, isError, isLoading } = useQuery<IHiAnimeSpotlight[]>({
     queryKey: ["search", debouncedQuery],
     queryFn: async () => {
       const response = await fetch(
-        `${BackendIP}/api/anime/search?q=${debouncedQuery}`,
+        `${BackendIP}/search-suggestions/${debouncedQuery}`,
         {
           method: "GET",
         }
       );
       const data = await response.json();
-      return data.anime;
+      return data;
     },
     enabled: !!debouncedQuery,
     refetchOnWindowFocus: false,
   });
 
   return (
-    <div className={`relative rounded-lg flex flex-col items-center`}>
-      <div className="w-full py-2 px-5 flex items-center">
-        <form
-          className="flex items-center w-full h-full gap-3"
-          onSubmit={(e) => e.preventDefault()}
-        >
-          <div className="relative w-full">
-            <Search className="w-5 text-white absolute left-3 top-1/2 -translate-y-1/2 h-5" />
-            <Input
-              onChange={(e) => setQuery(e.target.value)}
-              value={query}
-              type="search"
-              placeholder="Cari anime..."
-              className="flex-1 w-full pl-12 bg-transparent outline-none text-white text-sm placeholder:text-gray-500"
-            />
-            {query && (
-              <button
-                onClick={clearSearch}
-                className="absolute right-3 top-1/2 -translate-y-1/2"
-              >
-                <X className="w-5 text-white h-5" />
-              </button>
-            )}
-          </div>
-        </form>
-      </div>
+    <div className={`relative w-full max-w-md mx-auto`}>
+      <form
+        className="relative flex items-center w-full"
+        onSubmit={(e) => e.preventDefault()}
+      >
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+        <Input
+          onChange={(e) => setQuery(e.target.value)}
+          value={query}
+          type="search"
+          placeholder="Search anime..."
+          className="w-full pl-9 pr-10 py-2 bg-background border-border focus:border-primary/50 transition-colors"
+        />
+        {query && (
+          <button
+            onClick={clearSearch}
+            className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-accent rounded-full transition-colors"
+          >
+            <X className="w-3 h-3 text-muted-foreground" />
+          </button>
+        )}
+      </form>
 
-      {isLoading && (
-        <div className="w-[94%] top-12 absolute justify-center items-center px-5 py-6 bg-card border border-border rounded-b-sm">
-          <div className="custom-loader" />
+      {/* Results Dropdown */}
+      {(isLoading || isError || (data && data.length > 0)) && (
+        <div className="absolute top-full left-0 right-0 mt-2 z-50 bg-popover border border-border rounded-md shadow-lg ring-1 ring-black/5 overflow-hidden animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95">
+          {isLoading && (
+            <div className="p-4 flex items-center justify-center text-muted-foreground">
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+            </div>
+          )}
+
+          {isError && (
+            <div className="p-4 text-center text-sm text-muted-foreground">
+              No results found.
+            </div>
+          )}
+
+          {!isLoading && !isError && data && data.length > 0 && (
+            <ScrollArea className="max-h-[60vh] overflow-y-auto">
+              <div className="p-2 space-y-1">
+                {data.map((anime) => (
+                  <Link
+                    key={anime.id}
+                    href={`/anime/${anime.id}`}
+                    onClick={() => {
+                      if (isMobile) {
+                        // Close mobile search if parent controls it,
+                        // but currently SearchBar doesn't have a close prop.
+                        // Assuming parent component handles unmounting or we just navigate.
+                      }
+                      setQuery("");
+                    }}
+                    className="flex items-start gap-3 p-2 rounded-md hover:bg-accent/50 transition-colors group"
+                  >
+                    <div className="relative shrink-0 rounded-sm overflow-hidden w-12 aspect-[3/4]">
+                      <Image
+                        src={anime.image || ""}
+                        fill
+                        className="object-cover transition-transform group-hover:scale-105"
+                        alt={anime.title}
+                        sizes="48px"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0 flex flex-col justify-center h-full py-0.5">
+                      <p className="text-sm font-medium leading-none text-foreground truncate group-hover:text-primary transition-colors">
+                        {anime.title}
+                      </p>
+                      <div className="flex items-center gap-2 mt-1.5 text-xs text-muted-foreground">
+                        <span className="truncate">
+                          {anime.jname || "Anime"}
+                        </span>
+                        {anime.items && (
+                          <>
+                            <span className="w-1 h-1 rounded-full bg-border shrink-0" />
+                            <span className="uppercase text-[10px] bg-accent px-1 rounded-sm">
+                              {anime.items.length > 0 ? anime.items[0] : "TV"}
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </ScrollArea>
+          )}
         </div>
-      )}
-
-      {isError && (
-        <div className="w-[94%] top-12 absolute justify-center items-center px-5 py-4 bg-card border border-border rounded-b-sm">
-          <div className="text-sm text-primary font-semibold p-4">
-            No animes found!
-          </div>
-        </div>
-      )}
-
-      {data && data.length > 0 && (
-        <ScrollArea className="w-[94%] absolute overflow-y-hidden max-h-60 bg-card border rounded-b-sm border-border px-5 py-4">
-          <ul className="space-y-4">
-            {data.map((anime: IAnime) => (
-              <li key={anime.id} className="text-white text-sm">
-                <Link
-                  href={`/anime/${anime.id}`}
-                  className="flex gap-6 items-center"
-                >
-                  <div className="relative rounded-xs overflow-hidden">
-                    <Image
-                      src={anime.bannerImage || ""}
-                      width={100}
-                      height={100}
-                      alt={anime.title}
-                      className="w-12 h-20 object-cover"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <strong>{anime.title}</strong>
-                    <p className="text-gray-400 text-xs">
-                      {anime.genre.join(", ")} | {anime.status}
-                    </p>
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </ScrollArea>
       )}
     </div>
   );

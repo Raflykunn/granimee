@@ -1,5 +1,9 @@
 "use client";
-import { useAnime, useDetailAnime, useLatestAnime } from "@/hooks/use-anime";
+import {
+  useDetailAnime,
+  useLatestAnime,
+  usePopularAnime,
+} from "@/hooks/use-anime";
 import { ChevronRight, Play } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -131,7 +135,7 @@ export const RelatedList = ({
 };
 
 export const TopList = () => {
-  const { anime: animes, isLoading } = useAnime("/api/list/anime");
+  const { anime: animes, isLoading } = usePopularAnime();
 
   if (isLoading) {
     return (
@@ -146,7 +150,7 @@ export const TopList = () => {
   return (
     <Card className="flex flex-col gap-6 py-6 md:border-y md:border-l md:border-ring border-none md:rounded-md md:shadow-none rounded-none">
       <CardHeader className="text-primary">
-        <H4 text={"Paling Popular"} />
+        <H4 text={"Most Popular"} />
       </CardHeader>
       <CardContent className="flex flex-col gap-6">
         {animes?.map((anime, index) => (
@@ -164,13 +168,13 @@ export const TopList = () => {
               alt={`${index}`}
               width={480}
               height={720}
-              src={anime?.bannerImage || ""}
+              src={anime?.image || ""}
               className="object-cover w-12 aspect-square rounded-full"
             />
             <div className="flex flex-col gap-2">
               <p className="text-sm">{anime?.title}</p>
               <span className="text-xs px-2 py-1 bg-accent text-accent-foreground font-semibold rounded-full w-max">
-                {anime?.rating}
+                {anime?.episodes}
               </span>
             </div>
           </Link>

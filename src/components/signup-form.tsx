@@ -51,7 +51,7 @@ export const SignupForm = ({
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `http://localhost:3000/home`,
+        redirectTo: `http://localhost:3000/auth/callback`,
       },
     });
 
@@ -70,32 +70,16 @@ export const SignupForm = ({
       return;
     }
 
-    const { data, error } = await supabasee.auth.signUp({
-      email: values.email,
-      password: values.password,
-      options: {
-        data: {
-          name: values.username,
-          role: "kami",
-        },
-      },
+    const upload = await fetch(`${BackendIP}/api/auth/signup`, {
+      method: "POST",
+      body: JSON.stringify({
+        email: values.email,
+        username: values.username,
+      }),
     });
-
-    if (data.user) {
-      const upload = await fetch(`${BackendIP}/api/auth/signup`, {
-        method: "POST",
-        body: JSON.stringify({
-          id: data.user.id,
-          email: values.email,
-          username: values.username,
-          role: "kami",
-        }),
-      });
-      if (upload.status !== 200) console.log(upload);
-    }
-
-    if (error) {
-      toast.error(`Error:, ${error.message}`);
+    const data = await upload.json();
+    if (upload.status !== 200) {
+      toast.error(`Error: ${data.message}`);
       return;
     }
 

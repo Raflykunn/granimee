@@ -9,10 +9,7 @@ export default async function DetailPage({
   return (
     <div className="relative flex flex-col gap-2 mb-6">
       <AnimeDetail slug={slug} />
-      <RelatedList
-        slug={slug}
-        header="Anime yang mirip dengan yang kamu tonton"
-      />
+      <RelatedList slug={slug} header="Maybe you like this" />
     </div>
   );
 }

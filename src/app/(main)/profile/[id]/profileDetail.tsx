@@ -13,7 +13,7 @@ export const ProfileDetail = ({ id }: { id: string }) => {
 
   return (
     <div className="flex flex-col w-1/3 gap-6">
-      <div className="flex flex-col justify-center items-center relative gap-6">
+      <div className="flex max-w-[200px] w-full flex-col justify-center items-center relative gap-6">
         <Avatar className="w-[200px] h-[200px]">
           {session?.user.user_metadata?.picture ? (
             <AvatarImage
@@ -44,23 +44,29 @@ export const ProfileDetail = ({ id }: { id: string }) => {
           Edit Profile
         </Button>
       ) : (
-          <form className="flex flex-col gap-8">
-            <div className="flex flex-col gap-2 w-full">
-              <p className="text-sm">Username</p>
-              <Input placeholder="Username" className="w-full" />
-            </div>
-            <div className="flex flex-col gap-2">
-              <p className="text-sm">Email</p>
-              <Input
-                placeholder="Email"
-                className="w-full"
-              />
-            </div>
-            <div className="flex justify-between items-center">
-              <Button type="submit" className="text-sm" onClick={() => setShowEdit(!showEdit)}>Simpan</Button>
-              <Button type="submit" className="text-sm" variant={"outline"} onClick={() => setShowEdit(!showEdit)}>Batal</Button>
-            </div>
-          </form>
+        <form className="flex flex-col gap-8">
+          <div className="flex flex-col gap-2 w-full">
+            <p className="text-sm">Username</p>
+            <Input placeholder="Username" className="w-full" />
+          </div>
+          <div className="flex justify-between items-center">
+            <Button
+              type="submit"
+              className="text-sm"
+              onClick={() => setShowEdit(!showEdit)}
+            >
+              Simpan
+            </Button>
+            <Button
+              type="submit"
+              className="text-sm"
+              variant={"outline"}
+              onClick={() => setShowEdit(!showEdit)}
+            >
+              Batal
+            </Button>
+          </div>
+        </form>
       )}
     </div>
   );
