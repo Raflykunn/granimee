@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///I:/Project%20Coding/granime.v2/src/app/page.tsx"],"sourcesContent":["\"use client\"\r\n\r\nimport React from \"react\"\r\n\r\n\r\nexport default function Page () {\r\n    React.useEffect(() => {\r\n        if (window.location.pathname === \"/\") window.location.href = \"/home\"    \r\n    })\r\n    return\r\n} "],"names":[],"mappings":";;;;AAEA;AAFA;;AAKe,SAAS;IACpB,gNAAK,CAAC,SAAS,CAAC;QACZ,IAAI,OAAO,QAAQ,CAAC,QAAQ,KAAK,KAAK,OAAO,QAAQ,CAAC,IAAI,GAAG;IACjE;IACA;AACJ","debugId":null}}]
-}
