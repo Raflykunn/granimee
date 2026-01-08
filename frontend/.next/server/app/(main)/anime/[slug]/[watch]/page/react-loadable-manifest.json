@@ -1,0 +1,9 @@
+{
+  "[project]/node_modules/plyr-react/dist/index.js [app-client] (ecmascript, next/dynamic entry)": {
+    "id": "[project]/node_modules/plyr-react/dist/index.js [app-client] (ecmascript, next/dynamic entry)",
+    "files": [
+      "static/chunks/node_modules_9682fdd4._.js",
+      "static/chunks/node_modules_plyr-react_dist_index_1f23ab72.js"
+    ]
+  }
+}

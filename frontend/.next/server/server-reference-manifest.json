@@ -1,0 +1,65 @@
+{
+  "node": {
+    "00d19ebf3354a9d90bb1c281e8e681e3e39475cca0": {
+      "workers": {
+        "app/(main)/profile/[id]/page": {
+          "moduleId": "[project]/.next-internal/server/app/(main)/profile/[id]/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/actions/watchHistory.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "getAllWatchHistory",
+          "filename": "src/app/actions/watchHistory.ts"
+        }
+      },
+      "layer": {
+        "app/(main)/profile/[id]/page": "rsc"
+      },
+      "filename": "src/app/actions/watchHistory.ts",
+      "exportedName": "getAllWatchHistory"
+    },
+    "6068e70c23606e500891a71ae0fc0ca8d3e15456fd": {
+      "workers": {
+        "app/(main)/anime/[slug]/[watch]/page": {
+          "moduleId": "[project]/.next-internal/server/app/(main)/anime/[slug]/[watch]/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/actions/watchHistory.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "getWatchHistory",
+          "filename": "src/app/actions/watchHistory.ts"
+        },
+        "app/(main)/profile/[id]/page": {
+          "moduleId": "[project]/.next-internal/server/app/(main)/profile/[id]/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/actions/watchHistory.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "getWatchHistory",
+          "filename": "src/app/actions/watchHistory.ts"
+        }
+      },
+      "layer": {
+        "app/(main)/anime/[slug]/[watch]/page": "action-browser",
+        "app/(main)/profile/[id]/page": "rsc"
+      },
+      "filename": "src/app/actions/watchHistory.ts",
+      "exportedName": "getWatchHistory"
+    },
+    "7f4b0cba02be3b597b8fbb29297a988084a193984c": {
+      "workers": {
+        "app/(main)/anime/[slug]/[watch]/page": {
+          "moduleId": "[project]/.next-internal/server/app/(main)/anime/[slug]/[watch]/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/actions/watchHistory.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "saveWatchProgress",
+          "filename": "src/app/actions/watchHistory.ts"
+        },
+        "app/(main)/profile/[id]/page": {
+          "moduleId": "[project]/.next-internal/server/app/(main)/profile/[id]/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/actions/watchHistory.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "saveWatchProgress",
+          "filename": "src/app/actions/watchHistory.ts"
+        }
+      },
+      "layer": {
+        "app/(main)/anime/[slug]/[watch]/page": "action-browser",
+        "app/(main)/profile/[id]/page": "rsc"
+      },
+      "filename": "src/app/actions/watchHistory.ts",
+      "exportedName": "saveWatchProgress"
+    }
+  },
+  "edge": {},
+  "encryptionKey": "HPrTcUrGfunYPjlpfIpxircaHy6v74xywdWzcXXlwGg="
+}
