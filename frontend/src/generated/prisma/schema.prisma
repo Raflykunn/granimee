@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id             String         @id @default(cuid())
+  email          String         @unique
+  username       String?
+  role           String         @default("user")
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  watchHistories watchHistory[]
+}
+
+model anime {
+  id          String    @id @default(cuid())
+  title       String
+  synopsis    String?
+  coverImage  String?
+  bannerImage String?
+  genre       String[]
+  status      String    @default("ongoing")
+  rating      Float
+  releaseDate Int
+  episodes    episode[]
+}
+
+model episode {
+  id             String         @id @default(cuid())
+  animeId        String
+  title          String
+  episodeNum     Int
+  duration       String
+  videoUrl       String
+  subtitleUrl    String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  anime          anime          @relation(fields: [animeId], references: [id])
+  watchHistories watchHistory[]
+}
+
+model watchHistory {
+  id        String   @id @default(cuid())
+  userId    String
+  episodeId String
+  progress  Int
+  updatedAt DateTime @updatedAt
+  episode   episode  @relation(fields: [episodeId], references: [id])
+  user      user     @relation(fields: [userId], references: [id])
+}
