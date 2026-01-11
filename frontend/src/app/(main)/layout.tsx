@@ -4,6 +4,7 @@ import { Footer } from "@/components/ui/footer";
 import { Navbar } from "@/components/ui/navbar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import ReactQueryProvider from "@/lib/ReactQueryProvider";
+import Image from "next/image";
 import { Toaster } from "sonner";
 
 export default function AnimeDetailPage({
@@ -11,13 +12,28 @@ export default function AnimeDetailPage({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <div className="relative">
+      <div className="fixed inset-0 -z-10 w-screen h-screen">
+        {/* <div className="absolute top-12 left-12 w-32 aspect-square rounded-full blur-2xl bg-primary/20"></div> */}
+        <Image src={"/8309.webp"} fill alt="mesh" className="" />
+        {/* <MeshGradient
+          width={window.innerWidth}
+          height={window.innerHeight}
+          colors={["#630ee1", "#1b1924"]}
+          distortion={0}
+          swirl={0.15}
+          grainMixer={0.17}
+          grainOverlay={0.03}
+          speed={0.7}
+          rotation={12}
+        /> */}
+      </div>
       <ReactQueryProvider>
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center bg-transparent items-center">
           <Navbar />
         </div>
         <SidebarProvider className="">
           <AppSidebar />
-          <SidebarInset className="md:my-12 md:mx-4">{children}</SidebarInset>
+          <SidebarInset className="md:my-12">{children}</SidebarInset>
           <Toaster />
         </SidebarProvider>
         <Footer />

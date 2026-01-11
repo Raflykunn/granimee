@@ -87,7 +87,7 @@ export const LatestList = () => {
   }
 
   return (
-    <div className="z-20 overflow-hidden bg-background gap-8 md:my-12 my-8 md:mx-12 mx-4 flex flex-col">
+    <div className="z-20 overflow-hidden bg-transparent gap-8 md:my-12 my-8 md:mx-12 mx-4 flex flex-col">
       <div className="flex items-center justify-between">
         <H3 text={"Latest Episode"} />
         <Link
@@ -97,24 +97,25 @@ export const LatestList = () => {
           View more <ChevronRight className="w-4 h-4" />
         </Link>
       </div>
-      <div className="flex flex-wrap gap-6">
-        {anime?.slice(0, 18)?.map((anime, index: number) => (
+      <div className="grid grid-cols-2 sm:grid-cols-3 2xl:grid-cols-4 gap-6">
+        {anime?.map((anime, index: number) => (
           <Link
-            href={`/anime/${anime.id}`}
-            className="relative group max-w-48 md:w-40 w-28 aspect-[1/1.45] flex-auto h-auto flex flex-col gap-2"
+            href={`/anime/${anime.id}/watch?ep=${anime.episodes}`}
+            className="relative group rounded-lg transition-all duration-300 hover:shadow-sm h-auto flex flex-col gap-2"
             key={index}
           >
-            <div className="absolute w-full aspect-[1/1.45] rounded-sm group-hover:bg-black/30 group-hover:backdrop-blur-xs flex justify-center items-center transition-all duration-500">
-              <span className="p-4 rounded-full bg-muted text-muted-foreground hidden group-hover:block">
-                <Play className="w-5 h-5" />
-              </span>
+            <div className="absolute w-full max-h-24 h-full bottom-0 justify-center px-3 rounded-br-lg rounded-bl-lg bg-black/30 backdrop-blur-sm flex flex-col gap-4">
+              <p className="md:text-sm text-xs text-left max-w-4/5 line-clamp-2 font-semibold">
+                {anime?.title}
+              </p>
+              <div className="flex items-center justify-between">
+                <p className="rounded-sm text-[9px] font-semibold p-2 bg-accent text-accent-foreground">
+                  Episode {anime.episodes}
+                </p>
+                <p className="text-[9px] font-bold">{anime.type}</p>
+              </div>
             </div>
-            <p className="absolute bottom-8 left-1 rounded-sm text-xs opacity-85 font-bold p-2 bg-primary text-primary-foreground">
-              Episode {anime.episodes}
-            </p>
-            <p className="absolute top-1 right-1 rounded-sm text-[9px] font-semibold p-2 bg-accent text-accent-foreground">
-              {anime.type}
-            </p>
+
             {/* <p className="absolute top-1 right-1 rounded-sm opacity-85 text-xs font-semibold p-2 bg-border text-primary">
               {anime?.}
             </p> */}
@@ -123,11 +124,8 @@ export const LatestList = () => {
               width={640}
               height={960}
               src={anime?.image || ""}
-              className="object-cover w-full aspect-[1/1.45] rounded-sm"
+              className="object-cover w-full aspect-[1/1.45] rounded-lg"
             />
-            <p className="ml-1 text-sm truncate w-full text-white">
-              {anime?.title}
-            </p>
           </Link>
         ))}
       </div>

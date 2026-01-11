@@ -119,7 +119,7 @@ export const EpisodeDetail = ({
             ))}
           </div>
         </div>
-        <div className="md:flex hidden bg-card border border-primary rounded-lg justify-between">
+        <div className="md:flex hidden bg-card/10 backdrop-blur-sm border border-primary rounded-lg justify-between">
           <div className="flex gap-8">
             <Image
               priority
@@ -147,7 +147,7 @@ export const EpisodeDetail = ({
               </div>
             </div>
           </div>
-          <div className="flex md:flex-col h-58 rounded-tr-lg justify-center rounded-br-lg w-1/3 bg-white/10 flex-row gap-6">
+          <div className="flex md:flex-col h-full rounded-tr-lg justify-center rounded-br-lg w-1/3 bg-white/10 flex-row gap-6">
             <div className="flex flex-col gap-4 p-4">
               <p className="text-xs">Aired: {anime?.aired}</p>
               <p className="text-xs">Status: {anime?.status}</p>

@@ -31,7 +31,7 @@ const DekstopNavbar = () => {
           >
             <FaTwitter />
           </Button>
-          <ProfileButton/>
+          <ProfileButton />
         </div>
       </div>
     </div>
