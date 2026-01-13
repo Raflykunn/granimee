@@ -12,7 +12,7 @@ const MobileNavbar = () => {
 
 const DekstopNavbar = () => {
   return (
-    <div className="fixed top-0 z-50 mx-auto w-full bg-sidebar justify-center flex items-center px-8 py-3 border-b border-ring">
+    <div className="fixed top-0 z-50 mx-auto w-full bg-black/30 backdrop-blur-xl justify-center flex items-center px-8 py-3 border-b border-white/30">
       <div className="max-w-64 w-1/4">
         <H4 text="Granime" />
       </div>

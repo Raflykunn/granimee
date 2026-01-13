@@ -5,6 +5,7 @@ import {
   IHiAnimeDetail,
   IHiAnimeSpotlight,
   IHiAnimeStreamData,
+  TopAnimeData,
 } from "@/lib/utils";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
@@ -64,14 +65,14 @@ export const useDetailAnime = (slug: string) => {
 };
 
 export const usePopularAnime = () => {
-  const { data: anime = [], isLoading } = useQuery<IHiAnimeSpotlight[]>({
-    queryKey: ["anime"],
+  const { data: anime, isLoading } = useQuery<TopAnimeData>({
+    queryKey: ["top"],
     queryFn: async () => {
-      const response = await fetch(`${BackendIP}/top-airing`, {
+      const response = await fetch(`http://localhost:3030/api/v1/topten`, {
         method: "GET",
       });
       const data = await response.json();
-      return data.results;
+      return data.data;
     },
     retry: 3,
     retryDelay: 2000,
@@ -113,7 +114,7 @@ export const useLatestAnime = (page: number = 1) => {
   return { anime, isLoading, error };
 };
 
-export const usePopularSeasonAnime = () => {
+export const useSpotlightAnime = () => {
   const {
     data: anime = [],
     isLoading,

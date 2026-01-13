@@ -48,12 +48,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }, [pathname]);
 
   return (
-    <Sidebar
-      collapsible="icon"
-      variant="floating"
-      {...props}
-      className="relative"
-    >
+    <Sidebar collapsible="icon" {...props} className="relative">
       <SidebarContent className="flex flex-col justify-center items-center px-4">
         <SidebarTrigger />
         <SidebarMenu className="flex flex-col gap-6">

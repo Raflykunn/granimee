@@ -4,8 +4,8 @@ import { ImageSlider } from "@/components/imageslider";
 
 export default function Home() {
   return (
-    <div className="bg-transparent relative flex overflow-x-hidden gap-0 my-12 lg:flex-row flex-col">
-      <div className="flex lg:max-w-3/4 max-w-full w-full flex-col pl-4">
+    <div className="bg-transparent relative flex overflow-x-hidden gap-0 mt-12 lg:flex-row flex-col">
+      <div className="flex lg:max-w-3/4 max-w-full w-full flex-col">
         <ImageSlider />
         <LatestList />
       </div>

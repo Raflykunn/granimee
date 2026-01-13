@@ -8,6 +8,7 @@ import { AnimeItem } from "@/lib/utils";
 import { ChevronRight, Play } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
@@ -90,20 +91,19 @@ export const LatestList = () => {
     <div className="z-20 overflow-hidden bg-transparent gap-8 md:my-12 my-8 md:mx-12 mx-4 flex flex-col">
       <div className="flex items-center justify-between">
         <H3 text={"Latest Episode"} />
-        <Link
-          href="/latest"
-          className="text-foreground text-xs flex items-center"
-        >
-          View more <ChevronRight className="w-4 h-4" />
-        </Link>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 2xl:grid-cols-4 gap-6">
         {anime?.map((anime, index: number) => (
           <Link
             href={`/anime/${anime.id}/watch?ep=${anime.episodes}`}
-            className="relative group rounded-lg transition-all duration-300 hover:shadow-sm h-auto flex flex-col gap-2"
+            className="relative group rounded-lg hover:-translate-y-2 transition-all duration-300 hover:shadow-sm h-auto flex flex-col gap-2"
             key={index}
           >
+            <div className="absolute w-full rounded-lg aspect-[1/1.45] group-hover:bg-black/30 group-hover:backdrop-blur-xs flex justify-center items-center transition-all duration-500">
+              <span className="p-4 rounded-full bg-muted text-muted-foreground hidden group-hover:block">
+                <Play className="w-5 h-5" />
+              </span>
+            </div>
             <div className="absolute w-full max-h-24 h-full bottom-0 justify-center px-3 rounded-br-lg rounded-bl-lg bg-black/30 backdrop-blur-sm flex flex-col gap-4">
               <p className="md:text-sm text-xs text-left max-w-4/5 line-clamp-2 font-semibold">
                 {anime?.title}
@@ -209,8 +209,17 @@ export const RelatedList = ({
 
 export const TopList = () => {
   const { anime, isLoading } = usePopularAnime();
+  const [selected, setSelected] = useState("today");
+  const topToday = anime?.today;
+  const topWeek = anime?.week;
+  const topMonth = anime?.month;
 
-  const animes = anime?.slice(0, 10);
+  const animes =
+    selected === "today"
+      ? anime?.today.slice(0, 10)
+      : selected === "week"
+      ? anime?.week.slice(0, 10)
+      : anime?.month.slice(0, 10);
 
   if (isLoading) {
     return (
@@ -223,7 +232,7 @@ export const TopList = () => {
   }
 
   return (
-    <Card className="flex flex-col gap-6 py-6 md:border-y md:border-l md:border-ring border-none md:rounded-md md:shadow-none rounded-none">
+    <Card className="flex bg-white/5 flex-col gap-6 py-6">
       <CardHeader className="text-primary">
         <H4 text={"Top Airing"} />
       </CardHeader>
@@ -243,14 +252,16 @@ export const TopList = () => {
               alt={`${index}`}
               width={480}
               height={720}
-              src={anime?.image || ""}
+              src={anime?.poster || ""}
               className="object-cover w-12 aspect-square rounded-full"
             />
             <div className="flex flex-col gap-2">
-              <p className="text-sm">{anime?.title}</p>
-              <span className="text-xs px-2 py-1 bg-accent text-accent-foreground font-semibold rounded-full w-max">
-                {anime?.episodes}
-              </span>
+              <p className="text-sm line-clamp-2 max-w-28 w-full">
+                {anime?.title}
+              </p>
+              {/* <span className="text-xs px-2 py-1 bg-accent text-accent-foreground font-semibold rounded-full w-max">
+                {anime?.episodes.eps}
+              </span> */}
             </div>
           </Link>
         ))}

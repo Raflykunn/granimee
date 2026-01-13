@@ -27,7 +27,7 @@ import { cn } from "@/lib/utils";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
-const SIDEBAR_WIDTH = "16rem";
+const SIDEBAR_WIDTH = "14rem";
 const SIDEBAR_WIDTH_MOBILE = "18rem";
 const SIDEBAR_WIDTH_ICON = "5rem";
 const SIDEBAR_KEYBOARD_SHORTCUT = "b";
@@ -265,7 +265,7 @@ function SidebarTrigger({
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
       className={cn(
-        "size-8 absolute w-6 cursor-pointer h-12 hover:opacity-100 top-24 -right-4 bg-sidebar/50 rounded-tr-sm rounded-br-sm border-y border-r border-sidebar-border",
+        "size-8 absolute w-6 cursor-pointer h-12 hover:opacity-100 top-24 -right-6 bg-sidebar/50 rounded-tr-sm rounded-br-sm border-y border-r border-sidebar-border",
         "",
         className
       )}

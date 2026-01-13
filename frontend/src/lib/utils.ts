@@ -215,3 +215,15 @@ export interface AnimeListData {
   pageInfo: PageInfo;
   response: AnimeItem[];
 }
+
+export interface TopAnimeData {
+  today: AnimeItem[];
+  week: AnimeItem[];
+  month: AnimeItem[];
+}
+
+// Root response
+export interface TopAnimeResponse {
+  status: boolean;
+  data: TopAnimeData;
+}

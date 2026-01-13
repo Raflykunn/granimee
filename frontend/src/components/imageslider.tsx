@@ -1,11 +1,10 @@
 "use client";
 
-import { usePopularSeasonAnime } from "@/hooks/use-anime";
+import { useSpotlightAnime } from "@/hooks/use-anime";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Play } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
 
@@ -27,7 +26,7 @@ const variants = {
 export const ImageSlider = () => {
   const [[index, direction], setIndex] = useState([1, 0]);
 
-  const { anime, isLoading } = usePopularSeasonAnime();
+  const { anime, isLoading } = useSpotlightAnime();
 
   const imagesList = anime.map((item) => item.image).splice(0, 10);
 
@@ -58,33 +57,39 @@ export const ImageSlider = () => {
     );
 
   return (
-    <Card className="w-full overflow-hidden border-primary h-[35vh] md:h-[55vh] p-0 mx-auto relative rounded-xl">
-      <div className="absolute bg-gradient-to-r from-17% from-background to-100% to-transparent w-full h-[35vh] md:h-[55vh] z-10"></div>
-      <div className="absolute bg-gradient-to-l from-background/100  to-20% to-transparent w-full h-[35vh] md:h-[55vh] z-10"></div>
-      <div className="absolute bg-gradient-to-t from-10% from-background/40 to-20% to-transparent w-full h-[35vh] md:h-[55vh] z-10"></div>
+    <Card className="w-[95%] overflow-hidden border-primary/30 shadow-lg h-[35vh] md:h-[55vh] p-0 mx-auto relative rounded-xl">
+      <motion.img
+        custom={direction}
+        variants={variants}
+        initial="enter"
+        animate="center"
+        exit="exit"
+        transition={{ duration: 0.5 }}
+        alt="image"
+        className="absolute bg-black/30 blur-lg rounded-xl w-full h-full object-cover"
+        src={imagesList[index] || ""}
+      />
+      <div className="absolute bg-gradient-to-r from-8% from-background to-100% to-transparent w-full h-[35vh] md:h-[55vh] z-10"></div>
+      <div className="absolute bg-gradient-to-l from-background to-20% to-transparent w-full h-[35vh] md:h-[55vh] z-10"></div>
+      <div className="absolute bg-gradient-to-t from-10% from-background/40 to-25% to-transparent w-full h-[35vh] md:h-[55vh] z-10"></div>
 
       <div className="relative rounded-xl overflow-hidden h-full">
         <div className="absolute md:bottom-8 bottom-2 right-8 flex gap-6 items-center z-20">
-          <Button
-            variant={"outline"}
+          <button
             onClick={() => paginate(-1)}
-            className="dark:bg-accent md:size-12 size-8 dark:text-accent-foreground dark:hover:bg-accent dark:hover:text-accent-foreground border rounded-full cursor-pointer"
+            className="bg-black/15 w-10 h-10 p-1 flex items-center justify-center text-foreground hover:bg-white/10 backdrop-blur-sm border rounded-sm border-white/10 shadow cursor-pointer"
           >
-            <ChevronLeft className="md:w-12 md:h-12 w-8 h-8" />
-          </Button>
-          <p className="text-xs md:text-base">
-            {index + 1} / {imagesList.length}
-          </p>
-          <Button
-            variant={"outline"}
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button
             onClick={() => paginate(1)}
-            className="dark:bg-accent dark:border-accent dark:text-accent-foreground dark:hover:bg-accent dark:hover:text-accent-foreground border rounded-full cursor-pointer"
+            className="bg-black/15 w-10 h-10 p-1 flex items-center justify-center text-foreground hover:bg-white/10 backdrop-blur-sm border rounded-sm border-white/10 shadow cursor-pointer"
           >
-            <ChevronRight className="w-12 h-12" />
-          </Button>
+            <ChevronRight className="w-5 h-5" />
+          </button>
         </div>
         <AnimatePresence initial={false} custom={direction}>
-          <div key={index} className="rounded-xl w-full h-full">
+          <div key={index} className="rounded-xl p-6 w-full h-full">
             <motion.div
               custom={direction}
               variants={variants}
@@ -94,13 +99,13 @@ export const ImageSlider = () => {
               transition={{ duration: 0.5 }}
               className="absolute top-1/2 -translate-y-1/2 xl:left-12 sm:left-8 left-5 max-w-lg md:w-3/5 w-1/2 line-clamp-2 truncate flex flex-col gap-3 z-20"
             >
-              <p className="text-primary md:text-sm text-xs">
-                #{index + 1} This Season
+              <p className="text-primary font-bold md:text-sm text-xs">
+                #{index + 1} Spotlight
               </p>
-              <p className="md:text-2xl text-lg font-bold">
+              <p className="md:text-2xl text-lg font-bold max-w-[93%] w-full truncate">
                 {anime[index]?.title}
               </p>
-              <p className="text-xs md:inline-block line-clamp-2 hidden">
+              <p className="text-xs max-w-4/5 w-full text-wrap line-clamp-2 leading-5 tracking-wide">
                 {anime[index]?.other_data.description}
               </p>
               <div className="flex gap-2 items-center">
