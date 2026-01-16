@@ -1,8 +1,6 @@
 "use client";
 import React from "react";
-import { FaDiscord, FaTwitter } from "react-icons/fa";
 import { ProfileButton } from "../profilebutton";
-import { Button } from "./button";
 import SearchBar from "./search";
 import { H4 } from "./typography";
 
@@ -21,16 +19,6 @@ const DekstopNavbar = () => {
           <SearchBar />
         </div>
         <div className="w-1/3 flex justify-end gap-4 items-center">
-          <Button variant={"secondary"} className="rounded-sm size-12">
-            <FaDiscord />
-          </Button>
-          <Button
-            variant={"secondary"}
-            size={"icon"}
-            className="rounded-sm size-12"
-          >
-            <FaTwitter />
-          </Button>
           <ProfileButton />
         </div>
       </div>

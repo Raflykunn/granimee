@@ -33,6 +33,8 @@ export const ProfileButton = () => {
     }
   }, [session]);
 
+  console.log(session)
+
   return (
     <div>
       {isProfile ? (
