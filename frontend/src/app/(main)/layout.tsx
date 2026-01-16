@@ -33,7 +33,7 @@ export default function AnimeDetailPage({
         </div>
         <SidebarProvider className="">
           <AppSidebar />
-          <SidebarInset className="md:px-4">{children}</SidebarInset>
+          <SidebarInset className="md:px-4 md:mt-6">{children}</SidebarInset>
           <Toaster />
         </SidebarProvider>
         <Footer />
@@ -41,3 +41,4 @@ export default function AnimeDetailPage({
     </div>
   );
 }
+
